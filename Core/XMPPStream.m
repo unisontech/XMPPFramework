@@ -2434,8 +2434,9 @@ enum XMPPStreamConfig
 	
 	NSString *outgoingStr = [message compactXMLString];
 	NSData *outgoingData = [outgoingStr dataUsingEncoding:NSUTF8StringEncoding];
-	
-	XMPPLogSend(@"SEND: %@", outgoingStr);
+
+    XMPPMessage *logMessage = [self getLogMessage:[message copy]];
+    XMPPLogSend(@"SEND: %@", [logMessage compactXMLString]);
 	numberOfBytesSent += [outgoingData length];
 	
 	[asyncSocket writeData:outgoingData
@@ -2443,6 +2444,14 @@ enum XMPPStreamConfig
 	                   tag:tag];
 	
 	[multicastDelegate xmppStream:self didSendMessage:message];
+}
+
+- (XMPPMessage *)getLogMessage:(XMPPMessage *)message {
+    if ([message isChatMessageWithBody]) {
+        [[message elementForName:@"body"] setStringValue:@"******"];
+        [[message elementForName:@"html"] setStringValue:@"******"];
+    }
+    return message;
 }
 
 - (void)continueSendPresence:(XMPPPresence *)presence withTag:(long)tag
@@ -4488,10 +4497,16 @@ enum XMPPStreamConfig
 	if (sender != parser) return;
 	
 	XMPPLogTrace();
-	XMPPLogRecvPost(@"RECV: %@", [element compactXMLString]);
-		
+
 	NSString *elementName = [element name];
-	
+
+    if ([elementName isEqual:@"message"]) {
+        XMPPMessage *logMessage = [self getLogMessage:[XMPPMessage messageFromElement:[element copy]]];
+        XMPPLogRecvPost(@"RECV: %@", [logMessage compactXMLString]);
+    } else {
+        XMPPLogRecvPost(@"RECV: %@", [element compactXMLString]);
+    }
+
 	if ([elementName isEqualToString:@"stream:error"] || [elementName isEqualToString:@"error"])
 	{
 		[multicastDelegate xmppStream:self didReceiveError:element];
