@@ -517,7 +517,11 @@
 		[resume addAttributeWithName:@"previd" stringValue:resumptionId];
 		[resume addAttributeWithName:@"h" stringValue:[NSString stringWithFormat:@"%u", lastHandledByClient]];
 		
-		[xmppStream sendBindElement:resume];
+        if (xmppStream.state == STATE_XMPP_AUTH) {
+            [xmppStream sendAuthElement:resume];
+        } else if (xmppStream.state == STATE_XMPP_BINDING) {
+            [xmppStream sendBindElement:resume];
+        }
 		
 		didAttemptResume = YES;
 	}};
