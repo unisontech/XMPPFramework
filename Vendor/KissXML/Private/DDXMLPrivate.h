@@ -1,3 +1,4 @@
+#import <libxml/tree.h>
 #import "DDXML.h"
 
 

@@ -1,3 +1,4 @@
+#import <libxml/tree.h>
 #import "DDXMLPrivate.h"
 #import "NSString+DDXML.h"
 

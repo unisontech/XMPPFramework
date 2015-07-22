@@ -7,3 +7,9 @@ FOUNDATION_EXPORT double XMPPFrameworkVersionNumber;
 FOUNDATION_EXPORT const unsigned char XMPPFrameworkVersionString[];
 
 #import <XMPPFramework/XMPP.h>
+#import <XMPPFramework/XMPPInternal.h>
+#import <XMPPFramework/XMPPLogging.h>
+#import <XMPPFramework/XMPPSASLAuthentication.h>
+#import <XMPPFramework/XMPPStreamManagement.h>
+#import <XMPPFramework/NSData+XMPP.h>
+#import <XMPPFramework/NSNumber+XMPP.h>
