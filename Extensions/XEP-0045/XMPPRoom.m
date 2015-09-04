@@ -1091,10 +1091,10 @@ enum XMPPRoomState
     {
         roomSubject = [message subject];
     }
-	else
-	{
-		// Todo... Handle other types of messages.
-	}
+    else if ([message isGroupChatMessage])
+    {
+        [multicastDelegate xmppRoom:self didReceiveMessage:message fromOccupant:from];
+    }
 }
 
 - (void)xmppStream:(XMPPStream *)sender didSendMessage:(XMPPMessage *)message
